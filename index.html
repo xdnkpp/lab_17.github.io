@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&display=swap" rel="stylesheet">
+    <style>
+        *{
+            font-family: 'Comfortaa', sans-serif;
+        }
+        .img{
+            background-color: rgb(255, 194, 202);
+        }
+        .img button{
+            color: rgb(255, 0, 106);
+        }
+        .anim {
+            width: 100px;
+            height: 100px;
+            background-color: rgb(137, 255, 200);
+            transition: all 0.5s ease;
+        }
+        .mov{
+            position: relative;
+            left: -100px;
+            width: 100px;
+            height: 100px;
+            background-color: rgb(233, 151, 253);
+            border-radius: 50px;
+        }
+        .menu{
+            float: right;
+        }
+        .menu button{
+            color: rgb(255, 217, 0);
+        }
+        .menu div{
+            width: 120px; 
+            height: 100%; 
+            background-color: rgba(255, 248, 144, 0.774); 
+            top: 0; 
+            float: right;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="img">
+        <img id="image-container" src="" alt="Image" style="width: 300px; height: 300px;"><br>
+        <button id="prev-button">Предыдущее</button>
+        <button id="next-button">Следующее</button>
+    </div>
+    <hr>
+    <div class="anim" id="animated-element"></div>
+    <hr>
+    <div class="mov" id="moving-element"></div>
+    <hr>
+    <div class="menu">
+        <button id="menu-button">MENU</button> 
+        <div id="menu"> 
+        <ul> 
+            <li>Menu</li> 
+            <li>About</li> 
+            <li>Contact</li> 
+        </ul> 
+        </div>
+    </div>
+    <hr>
+    <div class="form">
+        <form>
+            <input type="text" id="name" placeholder="Имя">
+            <input type="text" id="email" placeholder="Email">
+            <button id="submit-button">Отправить</button>
+        </form>
+        <div id="response-container"></div>
+    </div>
+</body>
+
+<script>
+    $(document).ready(function() {
+        var currentImage = 0;
+        var images = [scr="https://pngimg.com/uploads/cat/cat_PNG50542.png", "https://pngimg.com/uploads/cat/cat_PNG50533.png", "https://pngimg.com/uploads/cat/cat_PNG50534.png"];
+
+        function showImage(index) {
+            $("#image-container").attr("src", images[index]);
+        }
+
+        $("#next-button").click(function() {
+            currentImage = (currentImage + 1) % images.length;
+            showImage(currentImage);
+        });
+
+        $("#prev-button").click(function() {
+            currentImage = (currentImage - 1 + images.length) % images.length;
+            showImage(currentImage);
+        });
+
+        showImage(currentImage);
+    });
+
+    $(document).ready(function() {
+        $("#animated-element").hover(
+            function() { 
+                $(this).animate({ 
+                    width: "200px",
+                    height: "200px",
+                }, 300)
+                .css("background-color", "rgb(151, 187, 255");
+            },
+            function() {
+                $(this).animate({
+                    width: "100px",
+                    height: "100px",
+                }, 300)
+                .css("background-color", "rgb(137, 255, 200");
+            }
+        );
+    });
+
+    $(document).ready(function() {
+            var speed = 5;
+            var $element = $("#moving-element");
+
+            function moveElement() {
+                $element.animate({
+                    left: "100%"
+                }, speed * 1000, "linear", function() {
+                    $element.css("left", "-100px");
+                    moveElement();
+                });
+            }
+
+            moveElement();
+    });
+
+    $(document).ready(function() { 
+            $("#menu-button").click(function() { 
+                $("#menu").animate({ 
+                    width: 'toggle' 
+                }); 
+            }); 
+    });
+
+    $(document).ready(function() {
+            $("#submit-button").click(function() {
+                var data = {
+                    name: $("#name").val(),
+                    email: $("#email").val()
+                };
+
+                $.ajax({
+                    url: "server_endpoint.php",
+                    method: "POST",
+                    data: data,
+                    success: function(response) {
+                        $("#response-container").html(response);
+                    }
+                });
+            });
+    });
+
+</script>
+</html>
